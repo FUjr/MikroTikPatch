@@ -360,7 +360,7 @@ jobs:
           sudo mv chr-$LATEST_VERSION$ARCH.img chr.img
 
     - name: Create chr-${{ env.LATEST_VERSION }}${{ env.ARCH }}.img
-      if: steps.get_latest.outputs.has_new_version == 'true' && (matrix.arch == 'x86' || matrix.arch == 'arm64')
+      if: steps.get_latest.outputs.has_new_version == 'true' && (matrix.arch == 'x86')
       run: |
         sudo modprobe nbd
         sudo apt-get install -y qemu-utils extlinux > /dev/null
