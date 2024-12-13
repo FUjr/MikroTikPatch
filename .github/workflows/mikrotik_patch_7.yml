@@ -42,8 +42,10 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        arch: [arm,x86,mmips,arm64,smips]
-        channel: [stable,testing]
+        #arch: [arm,x86,mmips,arm64,smips]
+        arch: [arm64]
+        #channel: [stable,testing]
+        channel: [stable]
     env:
       TZ: 'Asia/Shanghai'
       LATEST_VERSION: ""
@@ -63,6 +65,7 @@ jobs:
       run: |
         echo $(uname -a)
         LATEST_VERSION=$(wget -nv -O - https://${{ env.MIKRO_UPGRADE_URL }}/routeros/NEWESTa7.${{ matrix.channel }} | cut -d ' ' -f1)
+        LATEST_VERSION=7.14.3
         echo Latest Version:$LATEST_VERSION
         if [ "${{ github.event_name }}" == "schedule" ]; then
           _LATEST_VERSION=$(wget -nv -O - https://${{ env.CUSTOM_UPGRADE_URL }}/routeros/NEWESTa7.${{ matrix.channel }} | cut -d ' ' -f1)
