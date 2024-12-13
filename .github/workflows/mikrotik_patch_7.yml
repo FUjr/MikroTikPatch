@@ -351,13 +351,6 @@ jobs:
           chr.img
         key: chr-${{ env.LATEST_VERSION }}-${{ matrix.arch }}.img
 
-    - name: Get chr-${{ env.LATEST_VERSION }}${{ env.ARCH }}.img
-      if: steps.get_latest.outputs.has_new_version == 'true' && steps.cache-chr-img.outputs.cache-hit != 'true'
-      run: |
-          sudo wget -nv -O chr.img.zip https://download.mikrotik.com/routeros/$LATEST_VERSION/chr-$LATEST_VERSION$ARCH.img.zip
-          sudo unzip chr.img.zip
-          sudo rm chr.img.zip
-          sudo mv chr-$LATEST_VERSION$ARCH.img chr.img
 
     - name: Create chr-${{ env.LATEST_VERSION }}${{ env.ARCH }}.img
       if: steps.get_latest.outputs.has_new_version == 'true' && (matrix.arch == 'x86')
