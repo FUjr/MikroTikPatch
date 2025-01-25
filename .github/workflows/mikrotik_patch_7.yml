@@ -128,12 +128,14 @@ jobs:
         with:
             path: |
                 ./changelog-${{ env.LATEST_VERSION }}-${{ matrix.channel }}
+                ./packages-${{ env.LATEST_VERSION }}-${{ matrix.channel }}.csv
             key: changelog-${{ env.LATEST_VERSION }}-${{ matrix.channel }}
 
       - name: Get ChangeLog
         if: steps.cache-changelog.outputs.cache-hit != 'true'
         run: |
             wget -nv -O changelog-${{ env.LATEST_VERSION }}-${{ matrix.channel }} https://${{ env.MIKRO_UPGRADE_URL }}/routeros/$LATEST_VERSION/CHANGELOG
+            wget -nv -O packages-${{ env.LATEST_VERSION }}-${{ matrix.channel }}.csv https://${{ env.MIKRO_UPGRADE_URL }}/routeros/$LATEST_VERSION/packages.csv
             cat changelog-${{ env.LATEST_VERSION }}-${{ matrix.channel }} 
     
       - name: cache translation
@@ -157,6 +159,7 @@ jobs:
           path: |
             ./translation-${{ env.LATEST_VERSION }}-${{ matrix.channel }}
             ./version_info-${{ matrix.channel }}
+            ./packages-${{ env.LATEST_VERSION }}-${{ matrix.channel }}.csv
 
   RunPatch:
     needs: [Set_Runner,PreparePatch]
@@ -553,6 +556,7 @@ jobs:
           echo $LATEST_VERSION $BUILD_TIME | sudo tee ./routeros/NEWESTa7.${{ matrix.channel }}
         fi
         sudo cp translation-${{ env.LATEST_VERSION }}-${{ matrix.channel }} ./routeros/$LATEST_VERSION/CHANGELOG
+        sudo cp packages-${{ env.LATEST_VERSION }}-${{ matrix.channel }}.csv ./routeros/$LATEST_VERSION/packages.csv
         sudo cp ./all_packages/*.npk ./routeros/$LATEST_VERSION/
         sudo chown -R root:root ./routeros/
         sudo apt-get install -y lftp > /dev/null 2>&1
